@@ -87,6 +87,57 @@ public class Caesar {
     }
 
     static String magic(String s, String ss) {
-        return "";
+        s = s.toUpperCase();
+        int E = maxValue(ss, 'E');
+        int A = maxValue(ss, 'A');
+
+        if(A < E) {
+            char lletra = search(s);
+            int delta = lletra - 69;
+
+            StringBuilder resultat = new StringBuilder(decypher(s, delta));
+            return resultat.toString();
+        } else {
+
+            char lletra = search(s);
+            int delta = lletra - 65;
+            StringBuilder resultat = new StringBuilder(decypher(s, delta));
+            return resultat.toString();
+
+        }
+
     }
+
+
+    static int maxValue(String s, char c){
+        int con = 0;
+
+        s = s.toUpperCase();
+
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == c){
+                con++;
+            }
+        }
+
+        return con;
+    }
+
+    static char search(String s){
+        char lletra = s.charAt(0);
+
+        for (int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) < 65 || s.charAt(i) > 90){
+                continue;
+            }
+
+            if(maxValue(s, s.charAt(i)) > maxValue(s, lletra)){
+                lletra = s.charAt(i);
+            }
+
+        }
+
+        return lletra;
+    }
+
 }
