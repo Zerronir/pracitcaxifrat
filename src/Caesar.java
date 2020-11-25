@@ -45,7 +45,45 @@ public class Caesar {
     }
 
     static String decypher(String s, int delta) {
-        return "";
+
+        /**
+         *
+         * Para descifrar el principio es el mismo que el de cifrar pero a la inversa
+         * Seguimos necesitando los mismos valores puesto que han de coincidir
+         *
+         * Lo único que cambiaremos es el orden
+         *
+         * */
+
+        s = s.toUpperCase();
+        int ascii = delta % 26;
+        StringBuilder resultat = new StringBuilder();
+
+        for (int i = 0; i < s.length(); i++) {
+
+            char lletra = s.charAt(i);
+
+            if(lletra >= 65 && lletra <= 90){
+
+                // Le restamos el valor de ascii para encontrar el valor del caracter
+                lletra = (char) (lletra - ascii);
+
+                // Si el valor de letra es menor que 65 sumaremos 26 para que sea una letra válida
+                if(lletra < 65) {
+                    lletra = (char) (lletra + 26);
+                }
+
+                // Añadiremos el caracter de letra a la string
+                resultat.append(lletra);
+
+            } else {
+                resultat.append(lletra);
+            }
+
+        }
+
+        // Devolvemos el resultado
+        return resultat.toString();
     }
 
     static String magic(String s, String ss) {
