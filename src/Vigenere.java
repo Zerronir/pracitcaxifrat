@@ -2,93 +2,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Vigenere {
-    final String alfabeto = "abcdefghijklmnopqrstuvwxyz";
-
-    public static void main(String[] args) {
-        String s = "YYY";
-        String pass = "AAA";
-        int dif = 0;
-        int A = 65;
-        StringBuilder res = new StringBuilder();
-        if(s.length() > pass.length()){
-            StringBuilder ss = new StringBuilder(match(s, pass));
-
-            for (int i = 0; i < s.length(); i++) {
-                for (int j = 0; j < ss.length(); j++) {
-
-                    dif = s.charAt(i) - ss.charAt(i) + 1;
-                    System.out.println("dif -> " + dif + " res: " + (char) (s.charAt(i) + dif));
-
-                }
-            }
-
-        } else {
-            for (int i = 0; i < s.length(); i++) {
-                dif = s.charAt(i) - pass.charAt(i) + 1 - A;
-                char c = (char) (s.charAt(i) + dif);
-                res.append(c);
-            }
-            System.out.println(res.toString());
-        }
-
-
-    }
-
-    static String pruebas (String s, String pass){
-        s = s.toUpperCase();
-        pass = pass.toUpperCase();
-        int a = 65;
-        StringBuilder res = new StringBuilder();
-
-        if(s.length() > pass.length()){
-            String newPass = match(s, pass);
-
-            for (int i = 0; i < s.length(); i++) {
-
-                char c = s.charAt(i);
-
-                if (c >= 65 && c <= 90) {
-                    int letra = (c - a) + 1;
-
-                    if(c > 90){
-                         letra = (c - 26 - a) + 1;
-                        res.append((char) (letra + 1));
-                    }
-
-                    res.append((char) (letra + 1));
-
-                }
-
-            }
-
-        } else {
-            for (int i = 0; i < s.length(); i++) {
-                res.append((char) (pass.charAt(i) + 1));
-            }
-        }
-
-        System.out.println(res.toString());
-
-        return res.toString();
-
-    }
-
-    // Igualamos la longitud de la password añadiendo la misma palabra varias veces
-    static String match(String s, String ss){
-        StringBuilder res = new StringBuilder();
-        int cont = ss.length();
-        while(s.length() > cont){
-            res.append(ss);
-            cont++;
-        }
-
-        return res.toString();
-    }
 
     static String encode(String s, String password) {
         password = password.toUpperCase();
         s = s.toUpperCase();
-        StringBuilder res = new StringBuilder();
         StringBuilder key = new StringBuilder(newPass(password,s));
 
         // Libramos la frase de acentos y simbolos raros
@@ -97,59 +14,18 @@ public class Vigenere {
         // Adaptamos la password para los espacios de las frases
         StringBuilder finalPass = new StringBuilder(clean(key.toString()));
 
-        for (int i = 0; i < clean.length(); i++) {
-            // Calculamos el desplazamiento de la frase
-            int delta = finalPass.charAt(i) - 64;
-            // Creamos un caracter para saber en cual estamos y limpiar código
-            char c = clean.charAt(i);
-
-            if (c >= 65 && c <= 90){
-                c = (char) (delta + c);
-
-                if(c > 90) {
-                    c = (char) (c - 26);
-                }
-
-                res.append(c);
-            } else {
-                res.append(c);
-            }
-
-        }
-
-        return res.toString();
+        return cifrar(clean.toString(), finalPass.toString());
     }
 
     static String decode(String s, String password) {
         password = password.toUpperCase();
         s = s.toUpperCase();
-        StringBuilder res = new StringBuilder();
         StringBuilder key = new StringBuilder(newPass(password,s));
 
         // Libramos la frase de acentos y simbolos raros
         StringBuilder clean = new StringBuilder(clean(s));
 
-        for (int i = 0; i < clean.length(); i++) {
-            // Calculamos el desplazamiento de la frase
-            int delta = key.charAt(i) - 64;
-            // Creamos un caracter para saber en cual estamos y limpiar código
-            char c = clean.charAt(i);
-
-            if (c >= 65 && c <= 90){
-                c = (char) (c - delta);
-
-                if(c < 65) {
-                    c = (char) (c + 26);
-                }
-
-                res.append(c);
-            } else {
-                res.append(c);
-            }
-
-        }
-
-        return res.toString();
+        return descifrar(clean.toString(), key.toString());
     }
 
     // Escapamos los caracteres especiales con acentos
@@ -196,7 +72,6 @@ public class Vigenere {
         return res.toString();
     }
 
-
     // Adaptamos la password que tenemos a la palabra que queremos cifrar
     static String newPass(String pass, String s){
         StringBuilder res = new StringBuilder();
@@ -233,6 +108,56 @@ public class Vigenere {
             }
         }
 
+        return res.toString();
+    }
+
+    // Ejecutamos el cifrado
+    static String cifrar(String clean, String key){
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < clean.length(); i++) {
+            // Calculamos el desplazamiento de la frase
+            int delta = key.charAt(i) - 64;
+            // Creamos un caracter para saber en cual estamos y limpiar código
+            char c = clean.charAt(i);
+
+            if (c >= 65 && c <= 90){
+                c = (char) (delta + c);
+
+                if(c > 90) {
+                    c = (char) (c - 26);
+                }
+
+                res.append(c);
+            } else {
+                res.append(c);
+            }
+
+        }
+        return res.toString();
+    }
+
+    // Ejecutamos el descifrado
+    static String descifrar(String clean, String key) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < clean.length(); i++) {
+            // Calculamos el desplazamiento de la frase
+            int delta = key.charAt(i) - 64;
+            // Creamos un caracter para saber en cual estamos y limpiar código
+            char c = clean.charAt(i);
+
+            if (c >= 65 && c <= 90){
+                c = (char) (c - delta);
+
+                if(c < 65) {
+                    c = (char) (c + 26);
+                }
+
+                res.append(c);
+            } else {
+                res.append(c);
+            }
+
+        }
         return res.toString();
     }
 
