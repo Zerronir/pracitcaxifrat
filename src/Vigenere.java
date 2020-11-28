@@ -121,7 +121,35 @@ public class Vigenere {
     }
 
     static String decode(String s, String password) {
-        return "";
+        password = password.toUpperCase();
+        s = s.toUpperCase();
+        StringBuilder res = new StringBuilder();
+        StringBuilder key = new StringBuilder(newPass(password,s));
+
+        // Libramos la frase de acentos y simbolos raros
+        StringBuilder clean = new StringBuilder(clean(s));
+
+        for (int i = 0; i < clean.length(); i++) {
+            // Calculamos el desplazamiento de la frase
+            int delta = key.charAt(i) - 64;
+            // Creamos un caracter para saber en cual estamos y limpiar código
+            char c = clean.charAt(i);
+
+            if (c >= 65 && c <= 90){
+                c = (char) (c - delta);
+
+                if(c < 65) {
+                    c = (char) (c + 26);
+                }
+
+                res.append(c);
+            } else {
+                res.append(c);
+            }
+
+        }
+
+        return res.toString();
     }
 
     // Escapamos los caracteres especiales con acentos
@@ -174,10 +202,9 @@ public class Vigenere {
         StringBuilder res = new StringBuilder();
 
         for (int i = 0, j = 0; i < s.length(); i++) {
-
             char c = s.charAt(i);
 
-
+            // Comprobamos que sean valores ascii aceptados en una frase, es decir, que no haya caracteres raros
             if (c >= 65 && c <= 90 || c >= 192 && c <= 220) {
 
                 // Si la longitud de j llega a igualar a la de la contraseña original reiniciamos el contador
