@@ -211,11 +211,13 @@ public class Vigenere {
                 if (j == pass.length()) j=0;
 
                 // Buscamos si el caracter que está en i nos puede dar algún problema y lo escapamos
-                if(pass.charAt(j) == 181 || pass.charAt(j) == pass.charAt(j)
-                   || pass.charAt(j) == 144 || pass.charAt(j) == 212
-                   || pass.charAt(j) == 224 || pass.charAt(j) == 214
-                   || pass.charAt(j) == 222 || pass.charAt(j) == 227
-                   || pass.charAt(j) == 233 || pass.charAt(j) == 235) {
+                if(
+                      pass.charAt(j) == 181 /*Á*/ || pass.charAt(j) == 183 /*À*/
+                   || pass.charAt(j) == 144 /*É*/ || pass.charAt(j) == 212 /*È*/
+                   || pass.charAt(j) == 214 /*Í*/ || pass.charAt(j) == 224 /*Ì*/
+                   || pass.charAt(j) == 222 /*Ó*/ || pass.charAt(j) == 227 /*Ò*/
+                   || pass.charAt(j) == 233 /*Ú*/ || pass.charAt(j) == 235 /*Ù*/
+                ) {
                     res.append(escapeChar(pass.charAt(j)));
 
                 } else {
