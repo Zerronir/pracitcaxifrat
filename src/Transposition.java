@@ -1,7 +1,37 @@
-import javax.swing.*;
 import java.util.Arrays;
 
 public class Transposition {
+
+    public static void main(String[] args) {
+        String s = "ABCDEFG";
+        int col = 2;
+        int filas = s.length() / col;
+        StringBuilder r = new StringBuilder();
+        double ver = (double) s.length() / col;
+
+        if(ver > filas) filas++;
+
+        String[][] matrix = newMatrix(col, filas, s);
+        String[][] res = new String[matrix[0].length][matrix.length];
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j <matrix[0].length ; j++) {
+                matrix[j][i] = res[j][i];
+            }
+        }
+
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < res[0].length; j++) {
+                if(res[i][j] != null){
+                    r.append(res[i][j]);
+                }
+            }
+        }
+        
+        
+        System.out.println(r.toString());
+
+    }
 
     static String cypher(String s, int dim) {
         StringBuilder res = new StringBuilder();
@@ -16,7 +46,21 @@ public class Transposition {
 
         // Cream una matriu a on filtrarem per al resultat
         String[][] matrix = newMatrix(col, fil, s);
+        String[][] mat2 = new String[matrix[0].length][matrix.length];
 
+        for (int i = 0; i < matrix[0].length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                mat2[i][j] = matrix[j][i];
+            }
+        }
+
+        for (int i = 0; i < mat2.length; i++) {
+            for (int j = 0; j < mat2[0].length; j++) {
+
+                if(mat2[i][j] != null) res.append(mat2[i][j]);
+
+            }
+        }
         return res.toString();
     }
 
