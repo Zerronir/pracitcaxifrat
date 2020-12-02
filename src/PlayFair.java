@@ -106,7 +106,7 @@ public class PlayFair {
         // Comprobamos que el valor de la longitud de la array
         // modulo 2 no sea 0 y luego comprobamos que si el caracter
         // es X añadiremos una S y sino añadiremos una X
-        if  (cleanString.length() %2 != 0){
+        if  (cleanString.length() % 2 != 0){
             if (cleanString.charAt(cleanString.length()-1) == 'X'){
                 cleanString.append("S");
             }else {
