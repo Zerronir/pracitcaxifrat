@@ -1,6 +1,14 @@
 
 public class PlayFair {
 
+    public static void main(String[] args) {
+        String text = "maleta";
+        String[][] matrix = newMatrix("LICEU");
+        StringBuilder cleanString = new StringBuilder(clean(text.toUpperCase()));
+        System.out.println(cleanString.toString());
+    }
+
+
     public static String decrypt(String text, String pass) {
         StringBuilder res = new StringBuilder();
         String[][]matriz=newMatrix(pass);
@@ -78,50 +86,48 @@ public class PlayFair {
     }
 
     public static String encrypt(String text, String pass) {
-        // Creamos una variable de una StringBuilder para almacenar el resultado del cifrado
         StringBuilder res = new StringBuilder();
-        String[][] matrix = newMatrix(pass);
+        String[][] matrix = newMatrix(pass.toUpperCase());
+        // Limpiamos la frase que queremos cifrar usando nuestro método clean
         StringBuilder cleanString = new StringBuilder();
-        cleanString.append(clean(text.toUpperCase()));
+        cleanString.append(clean(text));
 
-        int longi = cleanString.length(), desplazamiento = 0;
-        int contador=0;
-        int [] posiciones = new int[cleanString.length()];
-        for (int i = 1; i < longi; i+=2) {
+        int length = cleanString.length(), desp = 0, cont = 0;
+        int [] pos = new int[cleanString.length()];
 
-            char caracter1 = cleanString.charAt(i-1);
-            char caracter2 = cleanString.charAt(i);
+        for (int i = 1; i < length; i+=2) {
+            char c1 = cleanString.charAt(i-1);
+            char c2 = cleanString.charAt(i);
 
-            if (caracter1 == caracter2){
+            if(c1 == c2){
                 cleanString.replace(i,i,"X");
                 i=1;
             }
+
         }
 
-        for (int i = 0; i <contador ; i++) {
-            cleanString.replace(posiciones[i]+desplazamiento,posiciones[i]+desplazamiento,"X");
-            //desplazamiento++;
+        for (int i = 0; i < cont; i++) {
+            cleanString.replace(pos[i]+desp, pos[i]+desp, "X");
+            //desp++;
         }
 
-        // Comprobamos que el valor de la longitud de la array
-        // modulo 2 no sea 0 y luego comprobamos que si el caracter
-        // es X añadiremos una S y sino añadiremos una X
-        if  (cleanString.length() % 2 != 0){
-            if (cleanString.charAt(cleanString.length()-1) == 'X'){
-                cleanString.append("S");
-            }else {
-                cleanString.append("X");
+        if(cleanString.length() % 2 != 0){
+            if(cleanString.charAt(cleanString.length()-1) == 'X'){
+                cleanString.append('S');
+            }else{
+                cleanString.append('X');
             }
         }
 
-        for (int i = 1; i < cleanString.length(); i+=2) {
+        int num = cleanString.length();
+
+        for (int i = 1; i < num; i+=2) {
 
             int[] filcol = saberFilCol(matrix, cleanString.charAt(i-1));
 
             int[] filcol1 = saberFilCol(matrix,cleanString.charAt(i));
 
             if  (filcol[0] == filcol1[0]){
-                //Si tienen misma fila
 
                 if (filcol[1] >= 4){
                     res.append(matrix[filcol[0]][0]);
@@ -163,9 +169,9 @@ public class PlayFair {
             }
 
             res.append(" ");
+
         }
 
-        res.deleteCharAt(res.length()-1);
 
         return res.toString();
     }
