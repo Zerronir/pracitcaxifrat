@@ -144,25 +144,22 @@ public class Transposition {
         char[][] matrix = new char[filas][dim];
 
         // Sustituimos los valores null por asteríscos
-        if (contA > 0) {
-
+        if(contA > 0) {
             for (int i = matrix.length; i > 0; i--) {
-                int innerCont = matrix[0].length - 1;
-
-                for (int j = contA; j > innerCont ; j--) {
-                    matrix[i - 1][innerCont] = '*';
-                    innerCont--;
+                int x = matrix[0].length - 1;
+                for (int j = contA; j > 0; j--) {
+                    matrix[i-1][x] = '*';
+                    x--;
                 }
-                //break;
+                break;
             }
         }
 
-
         for (int i = 0; i < matrix[0].length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
+            for (int k = 0; k < matrix.length; k++) {
 
-                if(matrix[j][i] == '*') {continue;}
-                matrix[j][i] = s.charAt(contB);
+                if(matrix[k][i] == '*') continue;
+                matrix[k][i] = s.charAt(contB);
                 contB++;
 
             }
@@ -173,10 +170,8 @@ public class Transposition {
 
                 if(matrix[i][j] == '*') continue;
                 res.append(matrix[i][j]);
-
             }
         }
-
 
         return res.toString();
     }
