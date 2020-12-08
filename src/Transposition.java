@@ -65,7 +65,64 @@ public class Transposition {
     }
 
     static String cypher(String s, String key) {
-        return "";
+        // Creamos una String para almacenar el resultado
+        StringBuilder res = new StringBuilder();
+
+        // Asignamos el tamaño de la matriz en filas y columnas
+        int cols = key.length(), filas = s.length() / cols;
+
+        // Redondeamos el número de filas
+        double ver = (double) s.length() / cols;
+        if(ver > filas) filas++;
+        // Creamos una array donde tendremos la clave y la contraseña
+        String[][] matrix = new String[filas][cols];
+
+        // Introducimos el valor de la frase que queremos cifrar
+        // dentro de la array
+        int x = 0;
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < cols; j++) {
+                if(x < s.length()) {
+                    StringBuilder c = new StringBuilder();
+                    c.append(s.charAt(x));
+                    matrix[i][j] = c.toString();
+                    c.delete(0, c.length()-1);
+                    x++;
+                }
+            }
+        }
+
+        int[] letras = new int[key.length()];
+        StringBuilder orderedKey = new StringBuilder();
+
+        // Llenamos la array con los caracteres de la clave
+        for (int i = 0; i < letras.length; i++) {
+            letras[i] = key.charAt(i);
+        }
+
+        int[] orderedChar = orderArray(letras);
+        char c;
+        // Iteramos el array asignando cada valor char dentro de la string
+        for (int value : orderedChar) {
+            c = (char) value;
+            // Devolvemos la array ordenada
+            orderedKey.append(c);
+        }
+
+        StringBuilder clave = new StringBuilder();
+        clave.append(key);
+
+        for (int i = 0; i < orderedKey.length(); i++) {
+            int pos = clave.toString().indexOf(orderedKey.charAt(i));
+
+            clave.replace(pos, pos+1, "+");
+            for (int j = 0; j < matrix.length; j++) {
+                if(matrix[j][pos] != null) res.append(matrix[j][pos]);
+            }
+
+        }
+
+        return res.toString();
     }
 
     static String decypher(String s, int dim) {
@@ -96,7 +153,7 @@ public class Transposition {
                     matrix[i - 1][innerCont] = '*';
                     innerCont--;
                 }
-                break;
+                //break;
             }
         }
 
@@ -104,7 +161,7 @@ public class Transposition {
         for (int i = 0; i < matrix[0].length; i++) {
             for (int j = 0; j < matrix.length; j++) {
 
-                if(matrix[j][i] == '*') continue;
+                if(matrix[j][i] == '*') {continue;}
                 matrix[j][i] = s.charAt(contB);
                 contB++;
 
@@ -125,9 +182,99 @@ public class Transposition {
     }
 
     static String decypher(String s, String key) {
-        return "";
-    }
+        StringBuilder res = new StringBuilder();
 
+        int cols = key.length(), filas = s.length() / cols;
+        double x = (double) s.length() / cols;
+
+        if (x > filas) filas++;
+
+        int numNulls = (filas*cols) - s.length();
+        String [][] matrix = new String[filas][cols];
+
+        if(numNulls > 0) {
+            int p = cols-1;
+            for (int i = numNulls; i > 0; i--) {
+                matrix[filas-1][p] = "*";
+                p--;
+            }
+        }
+
+        int [] letras = new int[key.length()];
+        StringBuilder orderedKey = new StringBuilder();
+
+        for (int i = 0; i < letras.length; i++) {
+            letras[i] = key.charAt(i);
+        }
+
+        // Ordenamos la clave
+        int[] orderedChars = orderArray(letras);
+        char c;
+        for (int i = 0; i < orderedChars.length; i++) {
+            c = (char) orderedChars[i];
+            orderedKey.append(c);
+        }
+
+        String[][] mat1 = new String[filas][cols];
+        StringBuilder key1 = new StringBuilder(key.toString());
+
+        int[] index = new int[orderedKey.length()];
+        for (int i = 0; i < orderedKey.length(); i++) {
+            int pos = key1.toString().indexOf(orderedKey.charAt(i));
+
+            key1.replace(pos, pos+1, "%");
+            mat1[filas-1][i] = matrix[filas-1][pos];
+            index[i] = pos;
+
+        }
+        // Eliminamos el contenido de la clave temporal
+        key1.delete(0, key1.length());
+        // Volvemos a rellenar la key temporal con el valor de la clave
+        key1.append(key);
+
+        int cont = 0;
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < filas; j++) {
+                if(cont < s.length()){
+                    if(mat1[j][i] != "*"){
+                        StringBuilder c1 = new StringBuilder();
+                        c1.append(s.charAt(cont));
+                        mat1[j][i] = c1.toString();
+                        c1.delete(0, c1.length()-1);
+                    } else {
+                        continue;
+                    }
+                    cont++;
+                }
+            }
+        }
+
+        StringBuilder dash = new StringBuilder();
+
+        for (int i = 0; i < orderedKey.length(); i++) {
+            dash.append("-");
+        }
+
+        String[][] mat2 = new String[filas][cols];
+
+        for (int i = 0; i < index.length; i++) {
+            int pos = index[i];
+
+            for (int j = 0; j < filas; j++) {
+                mat2[j][pos] = mat1[j][i];
+            }
+
+        }
+
+
+        for (int i = 0; i < mat2.length; i++) {
+            for (int j = 0; j < mat2[0].length; j++) {
+                if(!mat2[i][j].equals("*")) res.append(mat2[i][j]);
+            }
+        }
+
+        return res.toString();
+    }
 
     static String[][] newMatrix(int dim, int filas, String s){
         String[][] res = new String[filas][dim];
@@ -154,8 +301,7 @@ public class Transposition {
         return res;
     }
 
-
-    private int[] orderArray(int[] array) {
+    private static int[] orderArray(int[] array) {
 
         for (int i = array.length, x = 0; i > x; i--, x++) {
             for (int j = 1; j < i; j++) {
@@ -177,5 +323,4 @@ public class Transposition {
 
         return array;
     }
-
 }
