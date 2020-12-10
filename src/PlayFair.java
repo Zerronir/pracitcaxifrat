@@ -1,13 +1,6 @@
 
 public class PlayFair {
 
-    public static void main(String[] args) {
-        String text = "maleta";
-        String[][] matrix = newMatrix("LICEU");
-        StringBuilder cleanString = new StringBuilder(clean(text.toUpperCase()));
-        System.out.println(cleanString.toString());
-    }
-
 
     public static String decrypt(String text, String pass) {
         StringBuilder res = new StringBuilder();
@@ -172,7 +165,7 @@ public class PlayFair {
 
         }
 
-
+        res.deleteCharAt(res.length()-1);
         return res.toString();
     }
 
